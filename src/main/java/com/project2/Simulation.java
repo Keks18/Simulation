@@ -7,12 +7,10 @@ public class Simulation extends Entity{
     private int moveCounter;
     private Renderer renderer;
 
-    private ArrayList<Entity> actions;
-
     private void nextTurn(){};
     private void startSimulation(){
         while (1!=0){
-
+            nextTurn();
         }
     };
     private void pauseSimulation(){

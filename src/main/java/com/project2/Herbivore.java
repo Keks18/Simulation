@@ -1,9 +1,10 @@
 package com.project2;
 
 public class Herbivore extends Creature{
-    public Herbivore(int speed, int hp) {
-        this.speed = speed;
+    public Herbivore(int hp, int speed, Coordinates coordinates) {
         this.HP = hp;
+        this.speed = speed;
+        this.coordinates = coordinates;
     }
 
     @Override

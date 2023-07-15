@@ -1,14 +1,26 @@
 package com.project2;
 
-import java.util.Arrays;
+import java.util.Objects;
+import java.util.Random;
 
-public final class Coordinates {
-    private final int [] row;
-    private final int [] col;
+public class Coordinates extends Entity{
+    public int x;
+    public int y;
 
-    public Coordinates(int[] row, int[] col) {
-        this.row = row;
-        this.col = col;
+    public Coordinates() {
+        this.x = generateRandomCoordinate();
+        this.y = generateRandomCoordinate();
+    }
+    public int generateRandomCoordinate(){
+        return new Random().nextInt(15) + 1;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     @Override
@@ -16,13 +28,19 @@ public final class Coordinates {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Coordinates that = (Coordinates) o;
-        return Arrays.equals(row, that.row) && Arrays.equals(col, that.col);
+        return x == that.x && y == that.y;
     }
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(row);
-        result = 31 * result + Arrays.hashCode(col);
-        return result;
+        return Objects.hash(x, y);
+    }
+
+    @Override
+    public String toString() {
+        return "Coordinates{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }
