@@ -4,8 +4,9 @@ public class Main {
     public static void main(String[] args) {
         Map map = new Map();
         map.generateAllPositions();
-        System.out.println(map.getSize());
-        System.out.println(map);
+        Renderer renderer = new Renderer();
+        renderer.map = map;
+        renderer.render(11);
 
     }
 }

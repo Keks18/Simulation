@@ -5,6 +5,7 @@ public class Herbivore extends Creature{
         this.HP = hp;
         this.speed = speed;
         this.coordinates = coordinates;
+        this.view = View.H;
     }
 
     @Override

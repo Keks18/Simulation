@@ -8,6 +8,7 @@ public class Predator extends Creature{
         this.speed = speed;
         this.HP = hp;
         this.coordinates = coordinates;
+        this.view = View.P;
     }
 
     public int getPower() {

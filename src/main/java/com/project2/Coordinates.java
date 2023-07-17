@@ -12,7 +12,7 @@ public class Coordinates extends Entity{
         this.y = generateRandomCoordinate();
     }
     public int generateRandomCoordinate(){
-        return new Random().nextInt(15) + 1;
+        return new Random().nextInt(10) + 1;
     }
 
     public int getX() {
