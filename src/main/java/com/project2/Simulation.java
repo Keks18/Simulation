@@ -1,14 +1,13 @@
 package com.project2;
 
-import java.util.ArrayList;
-
 public class Simulation extends Entity{
-    private Map map;
-    private int moveCounter;
+    private SimulationMap simulationMap;
+    private int moveCounter = 0;
     private Renderer renderer;
 
     private void nextTurn(){
-        renderer.render(10);
+        renderer.render(11);
+        moveCounter++;
     };
     private void startSimulation(){
         while (1!=0){

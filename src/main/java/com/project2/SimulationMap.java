@@ -1,14 +1,21 @@
 package com.project2;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-public class Map extends Entity{
-    HashMap<Coordinates, Entity> map = new HashMap<>();
+public class SimulationMap {
+    Map<Coordinates, Entity> map = new HashMap<>();
     public int getSize(){
         return map.size();
     }
     public Entity setEntity(Coordinates coordinate, Entity entity){
-        return map.putIfAbsent(coordinate, entity);
+        if (map.putIfAbsent(coordinate, entity) == null){
+            entity.coordinates = coordinate;
+            return null;
+        } else {
+            return map.putIfAbsent(coordinate, entity);
+        }
     }
     public Entity getEntity(Coordinates coordinates){
         return map.get(coordinates);
@@ -19,9 +26,9 @@ public class Map extends Entity{
     public boolean containsCoordinate(Coordinates coordinates){
         return map.containsKey(coordinates);
     }
-    public void generateAllPositions(){
+    public void initializeEntities(){
         for (int i = 0; i < 3; i++){
-            if (generateEntityDefaultPositions(new Herbivore(10,1, new Coordinates())) != null){
+            if (generateEntityDefaultPositions(new Herbivore(10,1, new Coordinates(), this)) != null){
                 i--;
             }
         }
@@ -46,10 +53,27 @@ public class Map extends Entity{
             }
         }
     }
-    public <T extends Entity> Entity generateEntityDefaultPositions(T t){
-            return setEntity(t.getCoordinates(), t);
+    public Entity generateEntityDefaultPositions(Entity entity){
+            return setEntity(entity.getCoordinates(), entity);
     }
 
+    public void findAndMakeMoveCreatures() {
+        Iterator<Entity> iterator = map.values().iterator();
+
+        while (iterator.hasNext()) {
+            Entity entity = iterator.next();
+
+            if (entity instanceof Herbivore) {
+                Herbivore herbivore = (Herbivore) entity;
+                herbivore.makeMove();
+            }
+
+            if (entity instanceof Predator) {
+                Predator predator = (Predator) entity;
+                predator.makeMove();
+            }
+        }
+    }
     @Override
     public String toString() {
         return "Map{" +
