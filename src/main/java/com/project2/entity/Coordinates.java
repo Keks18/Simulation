@@ -1,4 +1,4 @@
-package com.project2;
+package com.project2.entity;
 
 import java.util.Objects;
 import java.util.Random;
@@ -10,6 +10,10 @@ public class Coordinates extends Entity{
     public Coordinates() {
         this.x = generateRandomCoordinate();
         this.y = generateRandomCoordinate();
+    }
+    public Coordinates(int x, int y){
+        this.x = x;
+        this.y = y;
     }
     public int generateRandomCoordinate(){
         return new Random().nextInt(10) + 1;

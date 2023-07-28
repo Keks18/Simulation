@@ -1,8 +1,8 @@
 package com.project2;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import com.project2.entity.*;
+
+import java.util.*;
 
 public class SimulationMap {
     Map<Coordinates, Entity> map = new HashMap<>();
@@ -17,6 +17,19 @@ public class SimulationMap {
             return map.putIfAbsent(coordinate, entity);
         }
     }
+
+    public SimulationMap() {
+        generateAllMapCoordinates();
+    }
+
+    public Map<Coordinates, Entity> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<Coordinates, Entity> map) {
+        this.map = map;
+    }
+
     public Entity getEntity(Coordinates coordinates){
         return map.get(coordinates);
     }
@@ -33,7 +46,7 @@ public class SimulationMap {
             }
         }
         for (int i = 0; i < 3; i++){
-            if (generateEntityDefaultPositions(new Predator(10,1, 10, new Coordinates())) != null){
+            if (generateEntityDefaultPositions(new Predator(10,1, 10, new Coordinates(), this)) != null){
                 i--;
             }
         }
@@ -58,19 +71,37 @@ public class SimulationMap {
     }
 
     public void findAndMakeMoveCreatures() {
+        // прототип того как будем удалять из мапы и добавлять обновленных существ с их координатами
         Iterator<Entity> iterator = map.values().iterator();
+        List<Entity> entitiesToAdd = new ArrayList<>();
 
         while (iterator.hasNext()) {
             Entity entity = iterator.next();
-
             if (entity instanceof Herbivore) {
                 Herbivore herbivore = (Herbivore) entity;
-                herbivore.makeMove();
+                entitiesToAdd.add(herbivore);
+                iterator.remove();
+//                map.put(new Coordinates(), herbivore);
             }
-
             if (entity instanceof Predator) {
                 Predator predator = (Predator) entity;
                 predator.makeMove();
+                entitiesToAdd.add(predator);
+                iterator.remove();
+            }
+        }
+        for (Entity entity :
+                entitiesToAdd) {
+            entity.coordinates.y++;
+        }
+        for (Entity entity : entitiesToAdd) {
+            map.put(entity.getCoordinates(), entity);
+        }
+    }
+    private void generateAllMapCoordinates(){
+        for (int x = 1; x < 11; x++) {
+            for (int y = 1; y < 11; y++) {
+                map.put(new Coordinates(x, y), null);
             }
         }
     }

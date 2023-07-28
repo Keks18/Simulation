@@ -1,4 +1,7 @@
-package com.project2;
+package com.project2.entity;
+
+import com.project2.SimulationMap;
+import com.project2.view.View;
 
 import java.util.Objects;
 
@@ -14,18 +17,25 @@ public class Herbivore extends Creature{
     }
 
     @Override
-    void makeMove() {
+    public void makeMove() {
 //        if (coordinates.x < 11 && coordinates.y < 11){
-//            simulationMap.removeEntity(coordinates);
 //            ++coordinates.y;
 //            ++coordinates.x;
-//            simulationMap.setEntity(coordinates, this);
 //        } else {
 //            System.out.println("Error");
 //        }
     }
+
+    @Override
+    void checkVariantsToMove() {
+
+    }
+
+    Coordinates sendCoordinate() {
+        return new Coordinates();
+    }
+
     void eatGrass(Coordinates coordinates){
-        simulationMap.map.remove(coordinates);
         this.coordinates = coordinates;
         increaseHP(GRASS_BENEFIT);
     }

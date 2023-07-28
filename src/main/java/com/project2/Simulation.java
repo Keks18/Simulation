@@ -1,16 +1,25 @@
 package com.project2;
 
-public class Simulation extends Entity{
-    private SimulationMap simulationMap;
-    private int moveCounter = 0;
-    private Renderer renderer;
+import com.project2.entity.Entity;
+
+public class Simulation {
+    Actions actions;
+    private int moveCounter = 1;
+
+    public Simulation(Actions actions) {
+        this.actions = actions;
+    }
 
     private void nextTurn(){
-        renderer.render(11);
-        moveCounter++;
+        actions.turnActions();
     };
-    private void startSimulation(){
-        while (1!=0){
+    public void startSimulation(){
+        System.out.println("Starting Simulation !!!");
+        System.out.println();
+        actions.initActions();
+        while (moveCounter < 2){
+            System.out.println("| Round " + moveCounter + " |");
+            moveCounter++;
             nextTurn();
         }
     };

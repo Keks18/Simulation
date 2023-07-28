@@ -1,4 +1,4 @@
-package com.project2;
+package com.project2.view;
 
 public enum View {
     H("H"),
