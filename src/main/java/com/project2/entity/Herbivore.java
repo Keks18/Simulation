@@ -1,14 +1,19 @@
 package com.project2.entity;
 
 import com.project2.SimulationMap;
+import com.project2.service.BreadthFirstSearch;
 import com.project2.view.View;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Map;
 import java.util.Objects;
 
 public class Herbivore extends Creature{
     final int GRASS_BENEFIT = 10;
 
     public Herbivore(int hp, int speed, Coordinates coordinates, SimulationMap simulationMap) {
+        this.pathFinderService = new BreadthFirstSearch(simulationMap);
         this.HP = hp;
         this.speed = speed;
         this.coordinates = coordinates;
@@ -18,26 +23,31 @@ public class Herbivore extends Creature{
 
     @Override
     public void makeMove() {
-//        if (coordinates.x < 11 && coordinates.y < 11){
-//            ++coordinates.y;
-//            ++coordinates.x;
-//        } else {
-//            System.out.println("Error");
-//        }
+        Map<Coordinates, Entity> currentMap = simulationMap.getMap();
+        Deque<Coordinates> oneStepPath = new ArrayDeque<>();
+
+        int currentSpeed = speed;
+        currentPath = pathFinderService.findPathToGrass(this.coordinates);
+        currentMap.put(coordinates, null);
+        if (currentPath == null){
+            return;
+        }
+        while (currentSpeed > 0) {
+            oneStepPath.add(currentPath.pollFirst());
+            if (pathFinderService.isGrassAround(oneStepPath.peekLast()) != null){
+                oneStepPath.add(eatGrass(pathFinderService.isGrassAround(oneStepPath.peekLast())));
+                break;
+            }
+            currentSpeed--;
+        }
+        this.coordinates = oneStepPath.peekLast();
+        currentMap.put(oneStepPath.getLast(), this);
     }
 
-    @Override
-    void checkVariantsToMove() {
-
-    }
-
-    Coordinates sendCoordinate() {
-        return new Coordinates();
-    }
-
-    void eatGrass(Coordinates coordinates){
-        this.coordinates = coordinates;
+    Coordinates eatGrass(Coordinates coordinates){
         increaseHP(GRASS_BENEFIT);
+        simulationMap.getMap().put(coordinates, null);
+        return coordinates;
     }
     void increaseHP(int hp){
         this.HP += hp;

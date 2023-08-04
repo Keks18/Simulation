@@ -5,6 +5,7 @@ import com.project2.entity.*;
 import java.util.*;
 
 public class SimulationMap {
+    public final int lineSize = 6;
     Map<Coordinates, Entity> map = new HashMap<>();
     public int getSize(){
         return map.size();
@@ -26,10 +27,6 @@ public class SimulationMap {
         return map;
     }
 
-    public void setMap(Map<Coordinates, Entity> map) {
-        this.map = map;
-    }
-
     public Entity getEntity(Coordinates coordinates){
         return map.get(coordinates);
     }
@@ -40,27 +37,27 @@ public class SimulationMap {
         return map.containsKey(coordinates);
     }
     public void initializeEntities(){
-        for (int i = 0; i < 3; i++){
-            if (generateEntityDefaultPositions(new Herbivore(10,1, new Coordinates(), this)) != null){
+        for (int i = 0; i < 1; i++){
+            if (generateEntityDefaultPositions(new Herbivore(10,3, new Coordinates(), this)) != null){
                 i--;
             }
         }
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 1; i++){
             if (generateEntityDefaultPositions(new Predator(10,1, 10, new Coordinates(), this)) != null){
                 i--;
             }
         }
-        for (int i = 0; i < 6; i++){
+        for (int i = 0; i < 1; i++){
             if (generateEntityDefaultPositions(new Grass(new Coordinates())) != null){
                 i--;
             }
         }
-        for (int i = 0; i < 8; i++){
+        for (int i = 0; i < 1; i++){
             if (generateEntityDefaultPositions(new Rock(new Coordinates())) != null){
                 i--;
             }
         }
-        for (int i = 0; i < 8; i++){
+        for (int i = 0; i < 1; i++){
             if (generateEntityDefaultPositions(new Tree(new Coordinates())) != null){
                 i--;
             }
@@ -70,37 +67,10 @@ public class SimulationMap {
             return setEntity(entity.getCoordinates(), entity);
     }
 
-    public void findAndMakeMoveCreatures() {
-        // прототип того как будем удалять из мапы и добавлять обновленных существ с их координатами
-        Iterator<Entity> iterator = map.values().iterator();
-        List<Entity> entitiesToAdd = new ArrayList<>();
 
-        while (iterator.hasNext()) {
-            Entity entity = iterator.next();
-            if (entity instanceof Herbivore) {
-                Herbivore herbivore = (Herbivore) entity;
-                entitiesToAdd.add(herbivore);
-                iterator.remove();
-//                map.put(new Coordinates(), herbivore);
-            }
-            if (entity instanceof Predator) {
-                Predator predator = (Predator) entity;
-                predator.makeMove();
-                entitiesToAdd.add(predator);
-                iterator.remove();
-            }
-        }
-        for (Entity entity :
-                entitiesToAdd) {
-            entity.coordinates.y++;
-        }
-        for (Entity entity : entitiesToAdd) {
-            map.put(entity.getCoordinates(), entity);
-        }
-    }
     private void generateAllMapCoordinates(){
-        for (int x = 1; x < 11; x++) {
-            for (int y = 1; y < 11; y++) {
+        for (int x = 1; x < lineSize; x++) {
+            for (int y = 1; y < lineSize; y++) {
                 map.put(new Coordinates(x, y), null);
             }
         }

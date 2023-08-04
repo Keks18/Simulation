@@ -16,7 +16,7 @@ public class Coordinates extends Entity{
         this.y = y;
     }
     public int generateRandomCoordinate(){
-        return new Random().nextInt(10) + 1;
+        return new Random().nextInt(5) + 1;
     }
 
     public int getX() {

@@ -5,9 +5,7 @@ import com.project2.SimulationMap;
 import com.project2.entity.Grass;
 import com.project2.entity.Herbivore;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,38 +27,75 @@ public class BreadthFirstSearch implements PathFinderService{
     }
 
     @Override
+    public Deque<Coordinates> findPathToGrass(Coordinates coordinates) {
+        Deque<Coordinates> path = new ArrayDeque<>();
+        Deque<Coordinates> toVisit = new ArrayDeque<>(getAvailableCoordinatesAround(coordinates));
+
+        while (!toVisit.isEmpty()){
+            Coordinates visited = toVisit.pollFirst();
+            path.add(visited);
+            if (isGrassAround(visited) != null) break;
+
+            toVisit.addAll(getAvailableCoordinatesAround(visited).stream().filter(e -> !path.contains(e)).toList());
+        }
+
+        return path;
+    }
+
+    @Override
     public Coordinates isHerbivoreAround(Coordinates coordinates) {
         //try to find a herbivore near the predator and return coordinate of herb. or null(help meth)
-        return checkCoordinatesAround(coordinates)
+        return getAvailableCoordinatesAround(coordinates)
                 .stream()
-                .filter(e -> simulationMap.getMap().get(e) instanceof Herbivore)
+                .filter(e -> simulationMap.getMap().get(e) instanceof Herbivore && simulationMap.getMap().get(e) != null)
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public void findPathToHerbivore(Coordinates coordinates) {
+    public Deque<Coordinates> findPathToHerbivore(Coordinates coordinates) {
+        Deque<Coordinates> path = new ArrayDeque();
+        Deque<Coordinates> toVisit = new ArrayDeque<>(getAvailableCoordinatesAround(coordinates));
+        while (!toVisit.isEmpty()){
+            Coordinates visited = toVisit.pollFirst();
+            path.add(visited);
+            if (isHerbivoreAround(visited) != null) break;
 
+            toVisit.addAll(getAvailableCoordinatesAround(visited).stream().filter(e -> !path.contains(e)).toList());
+        }
+
+        return path;
     }
 
-    @Override
-    public void findPathToGrass(Coordinates coordinates) {
 
-    }
-    private List<Coordinates> findAvailableCoordinatesAround(Coordinates coordinates){
-        return null;
+    private List<Coordinates> getAvailableCoordinatesAround(Coordinates coordinates){
+        Set<Coordinates> checkList = checkCoordinatesAround(coordinates);
+        List<Coordinates> availableList = new ArrayList<>();
+        for (Coordinates c: checkList) {
+            if (
+                    (c.getX() < simulationMap.lineSize && c.getX() > 0)
+                    && (c.getY() < simulationMap.lineSize && c.getY() > 0)
+                    && (simulationMap.getMap().get(c) == null)
+            ){
+                availableList.add(c);
+            }
+        }
+        return availableList;
     }
     private Set<Coordinates> checkCoordinatesAround(Coordinates coordinates){
-        //a set of coordinates to check food for a creature
+        //a list of coordinates to check food for a creature
+        int x = coordinates.getX();
+        int y = coordinates.getY();
+
         return Stream.of(
-                new Coordinates(++coordinates.x, ++coordinates.y),
-                new Coordinates(--coordinates.x, --coordinates.y),
-                new Coordinates(++coordinates.x, coordinates.y),
-                new Coordinates(coordinates.x, ++coordinates.y),
-                new Coordinates(--coordinates.x, ++coordinates.y),
-                new Coordinates(++coordinates.x, --coordinates.y),
-                new Coordinates(coordinates.x, --coordinates.y),
-                new Coordinates(--coordinates.x, coordinates.y)
+                new Coordinates(x - 1, y - 1),
+                new Coordinates(x, y - 1),
+                new Coordinates(x + 1, y - 1),
+                new Coordinates(x - 1, y),
+                new Coordinates(x + 1, y),
+                new Coordinates(x - 1, y + 1),
+                new Coordinates(x, y + 1),
+                new Coordinates(x + 1, y + 1)
         ).collect(Collectors.toCollection(HashSet::new));
     }
 }
