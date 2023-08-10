@@ -21,7 +21,7 @@ public class Simulation {
         System.out.println("Starting Simulation !!!");
         System.out.println();
         actions.initActions();
-        while (moveCounter < 2){
+        while (moveCounter < 1000){
             System.out.println("| Round " + moveCounter + " |");
             moveCounter++;
             nextTurn();
@@ -47,12 +47,10 @@ public class Simulation {
                 Herbivore herbivore = (Herbivore) entity;
                 creaturesToAdd.add(herbivore);
             }
-//            if (entity instanceof Predator) {
-//                Predator predator = (Predator) entity;
-//                predator.makeMove();
-//                creaturesToAdd.add(predator);
-////                iterator.remove();
-//            }
+            if (entity instanceof Predator) {
+                Predator predator = (Predator) entity;
+                creaturesToAdd.add(predator);
+            }
         }
         return creaturesToAdd;
     }

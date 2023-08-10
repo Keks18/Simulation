@@ -20,13 +20,15 @@ public class Herbivore extends Creature{
         this.view = View.H;
         this.simulationMap = simulationMap;
     }
-
+    public int getHP(){
+        return this.HP;
+    }
     @Override
     public void makeMove() {
         Map<Coordinates, Entity> currentMap = simulationMap.getMap();
         Deque<Coordinates> oneStepPath = new ArrayDeque<>();
-
         int currentSpeed = speed;
+
         currentPath = pathFinderService.findPathToGrass(this.coordinates);
         currentMap.put(coordinates, null);
         if (currentPath == null){
@@ -53,7 +55,7 @@ public class Herbivore extends Creature{
         this.HP += hp;
     }
     void decreaseHP(int hp){
-        this.HP += hp;
+        this.HP -= hp;
     }
 
     @Override

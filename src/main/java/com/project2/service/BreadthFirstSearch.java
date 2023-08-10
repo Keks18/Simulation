@@ -21,7 +21,7 @@ public class BreadthFirstSearch implements PathFinderService{
         //try to find a grass near the herbivore and return coordinate of grass or null (help meth)
         return checkCoordinatesAround(coordinates)
                 .stream()
-                .filter(e -> simulationMap.getMap().get(e) instanceof Grass)
+                .filter(e -> simulationMap.getMap().get(e) != null && simulationMap.getMap().get(e) instanceof Grass)
                 .findFirst()
                 .orElse(null);
     }
@@ -30,13 +30,15 @@ public class BreadthFirstSearch implements PathFinderService{
     public Deque<Coordinates> findPathToGrass(Coordinates coordinates) {
         Deque<Coordinates> path = new ArrayDeque<>();
         Deque<Coordinates> toVisit = new ArrayDeque<>(getAvailableCoordinatesAround(coordinates));
+//        Map<Coordinates, Coordinates> previousNode = new HashMap<>();
 
         while (!toVisit.isEmpty()){
-            Coordinates visited = toVisit.pollFirst();
-            path.add(visited);
-            if (isGrassAround(visited) != null) break;
+            Coordinates current = toVisit.pollFirst();
+            
+            path.add(current);
+            if (isGrassAround(current) != null) break;
 
-            toVisit.addAll(getAvailableCoordinatesAround(visited).stream().filter(e -> !path.contains(e)).toList());
+            toVisit.addAll(getAvailableCoordinatesAround(current).stream().filter(e -> !path.contains(e)).toList());
         }
 
         return path;
@@ -47,40 +49,42 @@ public class BreadthFirstSearch implements PathFinderService{
         //try to find a herbivore near the predator and return coordinate of herb. or null(help meth)
         return getAvailableCoordinatesAround(coordinates)
                 .stream()
-                .filter(e -> simulationMap.getMap().get(e) instanceof Herbivore && simulationMap.getMap().get(e) != null)
+                .filter(e -> simulationMap.getMap().get(e) != null && simulationMap.getMap().get(e) instanceof Herbivore)
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
     public Deque<Coordinates> findPathToHerbivore(Coordinates coordinates) {
-        Deque<Coordinates> path = new ArrayDeque();
         Deque<Coordinates> toVisit = new ArrayDeque<>(getAvailableCoordinatesAround(coordinates));
-        while (!toVisit.isEmpty()){
-            Coordinates visited = toVisit.pollFirst();
-            path.add(visited);
-            if (isHerbivoreAround(visited) != null) break;
+        Deque<Coordinates> path = new ArrayDeque<>();
 
-            toVisit.addAll(getAvailableCoordinatesAround(visited).stream().filter(e -> !path.contains(e)).toList());
+        while (!toVisit.isEmpty()){
+            Coordinates current = toVisit.pollFirst();
+            if (isHerbivoreAround(current) != null) break;
+            path.offerLast(current);
+
+            toVisit.addAll(getAvailableCoordinatesAround(current).stream().filter(e -> !path.contains(e)).toList());
         }
 
         return path;
     }
 
-
     private List<Coordinates> getAvailableCoordinatesAround(Coordinates coordinates){
-        Set<Coordinates> checkList = checkCoordinatesAround(coordinates);
-        List<Coordinates> availableList = new ArrayList<>();
-        for (Coordinates c: checkList) {
-            if (
-                    (c.getX() < simulationMap.lineSize && c.getX() > 0)
-                    && (c.getY() < simulationMap.lineSize && c.getY() > 0)
-                    && (simulationMap.getMap().get(c) == null)
-            ){
-                availableList.add(c);
-            }
-        }
-        return availableList;
+//        Set<Coordinates> checkList = checkCoordinatesAround(coordinates);
+//        List<Coordinates> availableList = new ArrayList<>();
+//        for (Coordinates c: checkList) {
+//            if (
+//                    (c.getX() < simulationMap.lineSize && c.getX() >= 1)
+//                    && (c.getY() < simulationMap.lineSize && c.getY() >= 1)
+//                    && (simulationMap.getMap().get(c) == null)
+//            ){
+//                availableList.add(c);
+//            }
+//        }
+        return checkCoordinatesAround(coordinates).stream()
+                .filter(el -> simulationMap.getMap().containsKey(el) && simulationMap.getMap().get(el) == null)
+                .collect(Collectors.toList());
     }
     private Set<Coordinates> checkCoordinatesAround(Coordinates coordinates){
         //a list of coordinates to check food for a creature
@@ -88,14 +92,15 @@ public class BreadthFirstSearch implements PathFinderService{
         int y = coordinates.getY();
 
         return Stream.of(
-                new Coordinates(x - 1, y - 1),
+//                new Coordinates(x - 1, y - 1),
                 new Coordinates(x, y - 1),
-                new Coordinates(x + 1, y - 1),
+//                new Coordinates(x + 1, y - 1),
                 new Coordinates(x - 1, y),
                 new Coordinates(x + 1, y),
-                new Coordinates(x - 1, y + 1),
-                new Coordinates(x, y + 1),
-                new Coordinates(x + 1, y + 1)
+//                new Coordinates(x - 1, y + 1),
+                new Coordinates(x, y + 1)
+//                new Coordinates(x + 1, y + 1)
         ).collect(Collectors.toCollection(HashSet::new));
     }
+
 }

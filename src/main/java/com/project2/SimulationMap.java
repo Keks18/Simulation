@@ -38,12 +38,12 @@ public class SimulationMap {
     }
     public void initializeEntities(){
         for (int i = 0; i < 1; i++){
-            if (generateEntityDefaultPositions(new Herbivore(10,3, new Coordinates(), this)) != null){
+            if (generateEntityDefaultPositions(new Herbivore(10,2, new Coordinates(), this)) != null){
                 i--;
             }
         }
         for (int i = 0; i < 1; i++){
-            if (generateEntityDefaultPositions(new Predator(10,1, 10, new Coordinates(), this)) != null){
+            if (generateEntityDefaultPositions(new Predator(10,2, 10, new Coordinates(), this)) != null){
                 i--;
             }
         }
