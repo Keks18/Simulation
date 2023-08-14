@@ -18,11 +18,12 @@ public class SimulationMap {
     public void setEntity(Coordinates coordinate, Entity entity){
         map.put(coordinate, entity);
     }
-
-    public Map<Coordinates, Entity> getMap() {
-        return map;
+    public Collection<Entity> getAllEntities(){
+        return map.values();
     }
-
+    public Set<Coordinates> getAllKeysCoordinates(){
+        return map.keySet();
+    }
     public Entity getEntity(Coordinates coordinates){
         return map.get(coordinates);
     }

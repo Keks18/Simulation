@@ -39,7 +39,7 @@ public class Simulation {
         }
     }
     public Deque<Creature> findCreaturesInMap(){
-        Iterator<Entity> iterator = simulationMap.getMap().values().iterator();
+        Iterator<Entity> iterator = simulationMap.getAllEntities().iterator();
         Deque<Creature> creaturesToAdd = new ArrayDeque<>();
         while (iterator.hasNext()) {
             Entity entity = iterator.next();
@@ -55,7 +55,7 @@ public class Simulation {
         return creaturesToAdd;
     }
     public Boolean herbivoreWin(){
-        Iterator<Entity> iterator = simulationMap.getMap().values().iterator();
+        Iterator<Entity> iterator = simulationMap.getAllEntities().iterator();
         List<Grass> grassInMap = new ArrayList<>();
 
         while (iterator.hasNext()) {
@@ -67,7 +67,7 @@ public class Simulation {
         return grassInMap.isEmpty();
     }
     public Boolean predatorWin(){
-        Iterator<Entity> iterator = simulationMap.getMap().values().iterator();
+        Iterator<Entity> iterator = simulationMap.getAllEntities().iterator();
         List<Herbivore> herbivoreInMap = new ArrayList<>();
 
         while (iterator.hasNext()) {

@@ -21,7 +21,7 @@ public class BreadthFirstSearch implements PathFinderService{
         //try to find a grass near the herbivore and return coordinate of grass or null (help meth)
         return checkCoordinatesAround(coordinates)
                 .stream()
-                .filter(e -> simulationMap.getMap().get(e) != null && simulationMap.getMap().get(e) instanceof Grass)
+                .filter(e -> simulationMap.getEntity(e) != null && simulationMap.getEntity(e) instanceof Grass)
                 .findFirst()
                 .orElse(null);
     }
@@ -33,6 +33,7 @@ public class BreadthFirstSearch implements PathFinderService{
         Map<Coordinates, Coordinates> parentMap = new HashMap<>();
         Coordinates end = null;
         int count = 0;
+
         queue.offer(start);
         visited.add(start);
 
@@ -69,7 +70,7 @@ public class BreadthFirstSearch implements PathFinderService{
         //try to find a herbivore near the predator and return coordinate of herb. or null(help meth)
         return checkCoordinatesAround(coordinates)
                 .stream()
-                .filter(e -> simulationMap.getMap().get(e) != null && simulationMap.getMap().get(e) instanceof Herbivore)
+                .filter(e -> simulationMap.getEntity(e) != null && simulationMap.getEntity(e) instanceof Herbivore)
                 .findFirst()
                 .orElse(null);
     }
@@ -129,19 +130,8 @@ public class BreadthFirstSearch implements PathFinderService{
         return path;
     }
     private List<Coordinates> getAvailableCoordinatesAround(Coordinates coordinates){
-//        Set<Coordinates> checkList = checkCoordinatesAround(coordinates);
-//        List<Coordinates> availableList = new ArrayList<>();
-//        for (Coordinates c: checkList) {
-//            if (
-//                    (c.getX() < simulationMap.lineSize && c.getX() >= 1)
-//                    && (c.getY() < simulationMap.lineSize && c.getY() >= 1)
-//                    && (simulationMap.getMap().get(c) == null)
-//            ){
-//                availableList.add(c);
-//            }
-//        }
         return checkCoordinatesAround(coordinates).stream()
-                .filter(el -> simulationMap.getMap().containsKey(el) && simulationMap.getMap().get(el) == null)
+                .filter(el -> simulationMap.containsCoordinate(el) && simulationMap.getEntity(el) == null)
                 .collect(Collectors.toList());
     }
     private Set<Coordinates> checkCoordinatesAround(Coordinates coordinates){

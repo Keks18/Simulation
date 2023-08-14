@@ -13,9 +13,9 @@ public class Renderer extends Entity {
 
         FIRST:for (keyCoordinates.setY(1); keyCoordinates.getY() < size; keyCoordinates.setY(keyCoordinates.getY()+1)) {
             SECOND:for (keyCoordinates.setX(1); keyCoordinates.getX() < size; keyCoordinates.setX(keyCoordinates.getX()+1)) {
-                for (Coordinates c: simulationMap.getMap().keySet()) {
-                    if (keyCoordinates.equals(c) && simulationMap.getMap().get(c) != null){
-                        System.out.print("[" + simulationMap.getMap().get(c).view + "] ");
+                for (Coordinates c: simulationMap.getAllKeysCoordinates()) {
+                    if (keyCoordinates.equals(c) && simulationMap.getEntity(c) != null){
+                        System.out.print("[" + simulationMap.getEntity(c).view + "] ");
                         continue SECOND;
                     }
                 }
