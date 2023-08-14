@@ -19,15 +19,14 @@ public class Herbivore extends Creature{
     }
     @Override
     public void makeMove() {
-        Map<Coordinates, Entity> currentMap = simulationMap.getMap();
         Deque<Coordinates> currentPath = new ArrayDeque<>();
         int currentSpeed = 0;
 
         if (pathFinderService.isGrassAround(this.coordinates) != null){
-            simulationMap.getMap().put(this.coordinates, null);
+            simulationMap.setEntity(this.coordinates, null);
             this.coordinates = pathFinderService.isGrassAround(this.coordinates);
             eatGrass(this.coordinates);
-            simulationMap.getMap().put(this.coordinates, this);
+            simulationMap.setEntity(this.coordinates, this);
         }
         else {
             this.currentPath = pathFinderService.findPathToGrass(this.coordinates);
@@ -36,7 +35,7 @@ public class Herbivore extends Creature{
             }
             this.currentPath.remove(0);
 
-            currentMap.put(this.coordinates, null);
+            simulationMap.setEntity(this.coordinates, null);
 
             while (currentSpeed < speed && currentSpeed < this.currentPath.size()) {
                 currentPath.add(this.currentPath.get(currentSpeed));
@@ -44,12 +43,12 @@ public class Herbivore extends Creature{
             }
 
             this.coordinates = currentPath.peekLast();
-            currentMap.put(currentPath.getLast(), this);
+            simulationMap.setEntity(currentPath.getLast(), this);
         }
     }
     void eatGrass(Coordinates coordinates){
         increaseHP(GRASS_BENEFIT);
-        simulationMap.getMap().put(coordinates, null);
+        simulationMap.setEntity(coordinates, null);
     }
     void increaseHP(int hp){
         this.HP += hp;

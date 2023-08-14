@@ -9,20 +9,14 @@ public class SimulationMap {
     private final int coordinateBound = 10;
 
     Map<Coordinates, Entity> map = new HashMap<>();
+    public SimulationMap() {
+        generateAllMapCoordinates();
+    }
     public int getSize(){
         return map.size();
     }
-    public Entity setEntity(Coordinates coordinate, Entity entity){
-        if (map.putIfAbsent(coordinate, entity) == null){
-            entity.coordinates = coordinate;
-            return null;
-        } else {
-            return map.putIfAbsent(coordinate, entity);
-        }
-    }
-
-    public SimulationMap() {
-        generateAllMapCoordinates();
+    public void setEntity(Coordinates coordinate, Entity entity){
+        map.put(coordinate, entity);
     }
 
     public Map<Coordinates, Entity> getMap() {
@@ -65,8 +59,16 @@ public class SimulationMap {
             }
         }
     }
+    private Entity setIfAbsentAndReturnEntity(Coordinates coordinate, Entity entity){
+        if (map.putIfAbsent(coordinate, entity) == null){
+            entity.coordinates = coordinate;
+            return null;
+        } else {
+            return map.putIfAbsent(coordinate, entity);
+        }
+    }
     public Entity generateEntityDefaultPositions(Entity entity){
-            return setEntity(entity.getCoordinates(), entity);
+            return setIfAbsentAndReturnEntity(entity.getCoordinates(), entity);
     }
 
 

@@ -6,7 +6,6 @@ import com.project2.view.View;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Map;
 import java.util.Objects;
 
 public class Predator extends Creature{
@@ -24,17 +23,15 @@ public class Predator extends Creature{
 
     @Override
     public void makeMove(){
-        Map<Coordinates, Entity> currentMap = simulationMap.getMap();
         Deque<Coordinates> currentPath = new ArrayDeque<>();
         int currentSpeed = 0;
 
         if (pathFinderService.isHerbivoreAround(this.getCoordinates()) != null){
-            attackHerbivore((Herbivore) simulationMap.getMap()
-                    .get(pathFinderService.isHerbivoreAround(this.getCoordinates())));
+            attackHerbivore((Herbivore) simulationMap.getEntity(pathFinderService.isHerbivoreAround(this.getCoordinates())));
         }
         else {
             this.currentPath = pathFinderService.findPathToHerbivore(this.coordinates);
-            currentMap.put(coordinates, null);
+            simulationMap.setEntity(coordinates, null);
             if (this.currentPath == null) {
                 return;
             }
@@ -46,7 +43,7 @@ public class Predator extends Creature{
             }
 
             this.coordinates = currentPath.peekLast();
-            currentMap.put(currentPath.getLast(), this);
+            simulationMap.setEntity(currentPath.getLast(), this);
         }
     }
     private void attackHerbivore(Herbivore herbivore){
@@ -58,9 +55,9 @@ public class Predator extends Creature{
     private void killHerbivore(Herbivore herbivore){
         Coordinates current = herbivore.getCoordinates();
 
-        simulationMap.getMap().put(this.coordinates, null);
+        simulationMap.setEntity(this.coordinates, null);
         this.coordinates = current;
-        simulationMap.getMap().put(this.getCoordinates(), this);
+        simulationMap.setEntity(this.getCoordinates(), this);
     }
     @Override
     public boolean equals(Object o) {
