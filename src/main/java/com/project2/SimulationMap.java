@@ -6,6 +6,8 @@ import java.util.*;
 
 public class SimulationMap {
     public final int lineSize = 11;
+    private final int coordinateBound = 10;
+
     Map<Coordinates, Entity> map = new HashMap<>();
     public int getSize(){
         return map.size();
@@ -38,27 +40,27 @@ public class SimulationMap {
     }
     public void initializeEntities(){
         for (int i = 0; i < 3; i++){
-            if (generateEntityDefaultPositions(new Herbivore(10,2, new Coordinates(), this)) != null){
+            if (generateEntityDefaultPositions(new Herbivore(10,2, new Coordinates(coordinateBound), this)) != null){
                 i--;
             }
         }
         for (int i = 0; i < 3; i++){
-            if (generateEntityDefaultPositions(new Predator(10,2, 10, new Coordinates(), this)) != null){
+            if (generateEntityDefaultPositions(new Predator(10,2, 10, new Coordinates(coordinateBound), this)) != null){
                 i--;
             }
         }
         for (int i = 0; i < 7; i++){
-            if (generateEntityDefaultPositions(new Grass(new Coordinates())) != null){
+            if (generateEntityDefaultPositions(new Grass(new Coordinates(coordinateBound))) != null){
                 i--;
             }
         }
         for (int i = 0; i < 10; i++){
-            if (generateEntityDefaultPositions(new Rock(new Coordinates())) != null){
+            if (generateEntityDefaultPositions(new Rock(new Coordinates(coordinateBound))) != null){
                 i--;
             }
         }
         for (int i = 0; i < 10; i++){
-            if (generateEntityDefaultPositions(new Tree(new Coordinates())) != null){
+            if (generateEntityDefaultPositions(new Tree(new Coordinates(coordinateBound))) != null){
                 i--;
             }
         }

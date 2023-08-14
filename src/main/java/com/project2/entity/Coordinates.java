@@ -7,16 +7,17 @@ public class Coordinates{
     private int x;
     private int y;
 
-    public Coordinates() {
-        this.x = generateRandomCoordinate();
-        this.y = generateRandomCoordinate();
+    public Coordinates(){}
+    public Coordinates(int bound) {
+        this.x = generateRandomCoordinate(bound);
+        this.y = generateRandomCoordinate(bound);
     }
     public Coordinates(int x, int y){
         this.x = x;
         this.y = y;
     }
-    public int generateRandomCoordinate(){
-        return new Random().nextInt(10) + 1;
+    private int generateRandomCoordinate(int bound){
+        return new Random().nextInt(bound) + 1;
     }
 
     public int getX() {
