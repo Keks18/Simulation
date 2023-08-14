@@ -5,7 +5,7 @@ import com.project2.entity.*;
 import java.util.*;
 
 public class SimulationMap {
-    public final int lineSize = 11;
+    private final int mapLineSize = 11;
     private final int coordinateBound = 10;
 
     Map<Coordinates, Entity> map = new HashMap<>();
@@ -71,12 +71,17 @@ public class SimulationMap {
 
 
     private void generateAllMapCoordinates(){
-        for (int x = 1; x < lineSize; x++) {
-            for (int y = 1; y < lineSize; y++) {
+        for (int x = 1; x < mapLineSize; x++) {
+            for (int y = 1; y < mapLineSize; y++) {
                 map.put(new Coordinates(x, y), null);
             }
         }
     }
+
+    public int getMapLineSize() {
+        return mapLineSize;
+    }
+
     @Override
     public String toString() {
         return "Map{" +

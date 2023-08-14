@@ -18,11 +18,11 @@ public class Actions {
         simulationMap.initializeEntities();
 
         renderer.simulationMap = simulationMap;
-        renderer.render(simulationMap.lineSize);
+        renderer.render(simulationMap.getMapLineSize());
     }
     public void turnActions(){
         simulation.makeMoveCreatures(simulation.findCreaturesInMap());
-        renderer.render(simulationMap.lineSize);
+        renderer.render(simulationMap.getMapLineSize());
         if (simulation.herbivoreWin()){
             simulation.endOfSimulation(Herbivore.class);
         }

@@ -5,9 +5,9 @@ import com.project2.entity.*;
 import java.util.*;
 
 public class Simulation {
+    private int moveCounter = 1;
     SimulationMap simulationMap ;
     Actions actions;
-    private int moveCounter = 1;
 
     public Simulation() {
         this.simulationMap = new SimulationMap();
