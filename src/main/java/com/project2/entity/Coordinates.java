@@ -4,8 +4,8 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Coordinates{
-    public int x;
-    public int y;
+    private int x;
+    private int y;
 
     public Coordinates() {
         this.x = generateRandomCoordinate();
@@ -25,6 +25,14 @@ public class Coordinates{
 
     public int getY() {
         return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     @Override
