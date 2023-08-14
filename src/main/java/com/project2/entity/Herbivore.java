@@ -20,7 +20,7 @@ public class Herbivore extends Creature{
     @Override
     public void makeMove() {
         Map<Coordinates, Entity> currentMap = simulationMap.getMap();
-        Deque<Coordinates> oneStepPath = new ArrayDeque<>();
+        Deque<Coordinates> currentPath = new ArrayDeque<>();
         int currentSpeed = 0;
 
         if (pathFinderService.isGrassAround(this.coordinates) != null){
@@ -30,28 +30,26 @@ public class Herbivore extends Creature{
             simulationMap.getMap().put(this.coordinates, this);
         }
         else {
-            currentPath = pathFinderService.findPathToGrass(this.coordinates);
-            if (currentPath == null) {
+            this.currentPath = pathFinderService.findPathToGrass(this.coordinates);
+            if (this.currentPath == null) {
                 return;
             }
+            this.currentPath.remove(0);
+
             currentMap.put(this.coordinates, null);
 
-            currentPath.remove(0);
-            while (currentSpeed < speed && currentSpeed < currentPath.toArray().length) {
-                oneStepPath.add(currentPath.get(currentSpeed));
-
+            while (currentSpeed < speed && currentSpeed < this.currentPath.size()) {
+                currentPath.add(this.currentPath.get(currentSpeed));
                 currentSpeed++;
             }
 
-            this.coordinates = oneStepPath.peekLast();
-            currentMap.put(oneStepPath.getLast(), this);
+            this.coordinates = currentPath.peekLast();
+            currentMap.put(currentPath.getLast(), this);
         }
     }
-
-    Coordinates eatGrass(Coordinates coordinates){
+    void eatGrass(Coordinates coordinates){
         increaseHP(GRASS_BENEFIT);
         simulationMap.getMap().put(coordinates, null);
-        return coordinates;
     }
     void increaseHP(int hp){
         this.HP += hp;

@@ -22,13 +22,10 @@ public class Predator extends Creature{
         this.simulationMap = simulationMap;
     }
 
-    public int getPower() {
-        return power;
-    }
     @Override
     public void makeMove(){
         Map<Coordinates, Entity> currentMap = simulationMap.getMap();
-        Deque<Coordinates> oneStepPath = new ArrayDeque<>();
+        Deque<Coordinates> currentPath = new ArrayDeque<>();
         int currentSpeed = 0;
 
         if (pathFinderService.isHerbivoreAround(this.getCoordinates()) != null){
@@ -36,20 +33,20 @@ public class Predator extends Creature{
                     .get(pathFinderService.isHerbivoreAround(this.getCoordinates())));
         }
         else {
-            currentPath = pathFinderService.findPathToHerbivore(this.coordinates);
+            this.currentPath = pathFinderService.findPathToHerbivore(this.coordinates);
             currentMap.put(coordinates, null);
-            if (currentPath == null) {
+            if (this.currentPath == null) {
                 return;
             }
-            currentPath.remove(0);
-            while (currentSpeed < speed && currentSpeed < currentPath.toArray().length) {
-                oneStepPath.add(currentPath.get(currentSpeed));
+            this.currentPath.remove(0);
+            while (currentSpeed < speed && currentSpeed < this.currentPath.size()) {
+                currentPath.add(this.currentPath.get(currentSpeed));
 
                 currentSpeed++;
             }
 
-            this.coordinates = oneStepPath.peekLast();
-            currentMap.put(oneStepPath.getLast(), this);
+            this.coordinates = currentPath.peekLast();
+            currentMap.put(currentPath.getLast(), this);
         }
     }
     private void attackHerbivore(Herbivore herbivore){
