@@ -35,7 +35,7 @@ public class Simulation {
     public void makeMoveCreatures(Deque<Creature> creaturesToAdd) {
         for (Creature creature :
                 creaturesToAdd) {
-            creature.makeMove();
+                if (creature.getHP() > 0) creature.makeMove();
         }
     }
     public Deque<Creature> findCreaturesInMap(){

@@ -29,28 +29,28 @@ public class Predator extends Creature{
     public void makeMove(){
         Map<Coordinates, Entity> currentMap = simulationMap.getMap();
         Deque<Coordinates> oneStepPath = new ArrayDeque<>();
-        int currentSpeed = speed;
+        int currentSpeed = 0;
 
-        currentPath = pathFinderService.findPathToHerbivore(this.coordinates);
-        currentMap.put(coordinates, null);
-        if (currentPath == null){
-            return;
+        if (pathFinderService.isHerbivoreAround(this.getCoordinates()) != null){
+            attackHerbivore((Herbivore) simulationMap.getMap()
+                    .get(pathFinderService.isHerbivoreAround(this.getCoordinates())));
         }
-        while (currentSpeed > 0) {
-            oneStepPath.add(currentPath.pollFirst());
-            if (pathFinderService.isHerbivoreAround(oneStepPath.peekLast()) != null){
-                attackHerbivore(
-                        (Herbivore) currentMap.get
-                                (pathFinderService.isHerbivoreAround(oneStepPath.peekLast()))
-                );
-                break;
+        else {
+            currentPath = pathFinderService.findPathToHerbivore(this.coordinates);
+            currentMap.put(coordinates, null);
+            if (currentPath == null) {
+                return;
             }
-            currentSpeed--;
+            currentPath.remove(0);
+            while (currentSpeed < speed && currentSpeed < currentPath.toArray().length) {
+                oneStepPath.add(currentPath.get(currentSpeed));
+
+                currentSpeed++;
+            }
+
+            this.coordinates = oneStepPath.peekLast();
+            currentMap.put(oneStepPath.getLast(), this);
         }
-
-        this.coordinates = oneStepPath.peekLast();
-        currentMap.put(oneStepPath.getLast(), this);
-
     }
     private void attackHerbivore(Herbivore herbivore){
         herbivore.decreaseHP(power);
@@ -59,7 +59,11 @@ public class Predator extends Creature{
         }
     }
     private void killHerbivore(Herbivore herbivore){
-            simulationMap.getMap().put(herbivore.coordinates, null);
+        Coordinates current = herbivore.getCoordinates();
+
+        simulationMap.getMap().put(this.coordinates, null);
+        this.coordinates = current;
+        simulationMap.getMap().put(this.getCoordinates(), this);
     }
     @Override
     public boolean equals(Object o) {

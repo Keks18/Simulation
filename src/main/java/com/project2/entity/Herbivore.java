@@ -4,10 +4,7 @@ import com.project2.SimulationMap;
 import com.project2.service.BreadthFirstSearch;
 import com.project2.view.View;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Herbivore extends Creature{
     final int GRASS_BENEFIT = 10;
@@ -20,30 +17,35 @@ public class Herbivore extends Creature{
         this.view = View.H;
         this.simulationMap = simulationMap;
     }
-    public int getHP(){
-        return this.HP;
-    }
     @Override
     public void makeMove() {
         Map<Coordinates, Entity> currentMap = simulationMap.getMap();
         Deque<Coordinates> oneStepPath = new ArrayDeque<>();
-        int currentSpeed = speed;
+        int currentSpeed = 0;
 
-        currentPath = pathFinderService.findPathToGrass(this.coordinates);
-        currentMap.put(coordinates, null);
-        if (currentPath == null){
-            return;
+        if (pathFinderService.isGrassAround(this.coordinates) != null){
+            simulationMap.getMap().put(this.coordinates, null);
+            this.coordinates = pathFinderService.isGrassAround(this.coordinates);
+            eatGrass(this.coordinates);
+            simulationMap.getMap().put(this.coordinates, this);
         }
-        while (currentSpeed > 0) {
-            oneStepPath.add(currentPath.pollFirst());
-            if (pathFinderService.isGrassAround(oneStepPath.peekLast()) != null){
-                oneStepPath.add(eatGrass(pathFinderService.isGrassAround(oneStepPath.peekLast())));
-                break;
+        else {
+            currentPath = pathFinderService.findPathToGrass(this.coordinates);
+            if (currentPath == null) {
+                return;
             }
-            currentSpeed--;
+            currentMap.put(this.coordinates, null);
+
+            currentPath.remove(0);
+            while (currentSpeed < speed && currentSpeed < currentPath.toArray().length) {
+                oneStepPath.add(currentPath.get(currentSpeed));
+
+                currentSpeed++;
+            }
+
+            this.coordinates = oneStepPath.peekLast();
+            currentMap.put(oneStepPath.getLast(), this);
         }
-        this.coordinates = oneStepPath.peekLast();
-        currentMap.put(oneStepPath.getLast(), this);
     }
 
     Coordinates eatGrass(Coordinates coordinates){

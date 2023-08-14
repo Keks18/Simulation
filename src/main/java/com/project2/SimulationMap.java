@@ -5,7 +5,7 @@ import com.project2.entity.*;
 import java.util.*;
 
 public class SimulationMap {
-    public final int lineSize = 6;
+    public final int lineSize = 11;
     Map<Coordinates, Entity> map = new HashMap<>();
     public int getSize(){
         return map.size();
@@ -37,27 +37,27 @@ public class SimulationMap {
         return map.containsKey(coordinates);
     }
     public void initializeEntities(){
-        for (int i = 0; i < 1; i++){
+        for (int i = 0; i < 3; i++){
             if (generateEntityDefaultPositions(new Herbivore(10,2, new Coordinates(), this)) != null){
                 i--;
             }
         }
-        for (int i = 0; i < 1; i++){
+        for (int i = 0; i < 3; i++){
             if (generateEntityDefaultPositions(new Predator(10,2, 10, new Coordinates(), this)) != null){
                 i--;
             }
         }
-        for (int i = 0; i < 1; i++){
+        for (int i = 0; i < 7; i++){
             if (generateEntityDefaultPositions(new Grass(new Coordinates())) != null){
                 i--;
             }
         }
-        for (int i = 0; i < 1; i++){
+        for (int i = 0; i < 10; i++){
             if (generateEntityDefaultPositions(new Rock(new Coordinates())) != null){
                 i--;
             }
         }
-        for (int i = 0; i < 1; i++){
+        for (int i = 0; i < 10; i++){
             if (generateEntityDefaultPositions(new Tree(new Coordinates())) != null){
                 i--;
             }

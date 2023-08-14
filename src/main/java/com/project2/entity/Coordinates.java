@@ -3,7 +3,7 @@ package com.project2.entity;
 import java.util.Objects;
 import java.util.Random;
 
-public class Coordinates extends Entity{
+public class Coordinates{
     public int x;
     public int y;
 
@@ -16,7 +16,7 @@ public class Coordinates extends Entity{
         this.y = y;
     }
     public int generateRandomCoordinate(){
-        return new Random().nextInt(5) + 1;
+        return new Random().nextInt(10) + 1;
     }
 
     public int getX() {

@@ -5,6 +5,7 @@ import com.project2.service.PathFinderService;
 
 import java.nio.file.Path;
 import java.util.Deque;
+import java.util.List;
 
 public abstract class Creature extends Entity{
     PathFinderService pathFinderService;
@@ -12,10 +13,14 @@ public abstract class Creature extends Entity{
 
     protected int HP;
 
+    public int getHP() {
+        return HP;
+    }
+
     public abstract void makeMove();
 
     SimulationMap simulationMap;
 
-    Deque<Coordinates> currentPath;
+    List<Coordinates> currentPath;
 
 }

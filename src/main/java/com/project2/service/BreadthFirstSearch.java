@@ -27,27 +27,47 @@ public class BreadthFirstSearch implements PathFinderService{
     }
 
     @Override
-    public Deque<Coordinates> findPathToGrass(Coordinates coordinates) {
-        Deque<Coordinates> path = new ArrayDeque<>();
-        Deque<Coordinates> toVisit = new ArrayDeque<>(getAvailableCoordinatesAround(coordinates));
-//        Map<Coordinates, Coordinates> previousNode = new HashMap<>();
+    public List<Coordinates> findPathToGrass(Coordinates start) {
+        Deque<Coordinates> queue = new ArrayDeque<>();
+        Set<Coordinates> visited = new HashSet<>();
+        Map<Coordinates, Coordinates> parentMap = new HashMap<>();
+        Coordinates end = null;
+        int count = 0;
+        queue.offer(start);
+        visited.add(start);
 
-        while (!toVisit.isEmpty()){
-            Coordinates current = toVisit.pollFirst();
-            
-            path.add(current);
-            if (isGrassAround(current) != null) break;
+        while (!visited.isEmpty()){
+            Coordinates current = queue.poll();
+            if (current == null){
+                return Stream.of(
+                        start,
+                        start
+                ).collect(Collectors.toList());
+            }
+            if (isGrassAround(current) != null){
+                end = current;
+                break;
+            }
 
-            toVisit.addAll(getAvailableCoordinatesAround(current).stream().filter(e -> !path.contains(e)).toList());
+            List<Coordinates> neighbors = getAvailableCoordinatesAround(current);
+
+            for (Coordinates neighbor :
+                    neighbors) {
+                if (!visited.contains(neighbor)){
+                    queue.offer(neighbor);
+                    visited.add(neighbor);
+                    parentMap.put(neighbor, current);
+                }
+            }
         }
 
-        return path;
+        return reconstructPath(parentMap, start, end);
     }
 
     @Override
     public Coordinates isHerbivoreAround(Coordinates coordinates) {
         //try to find a herbivore near the predator and return coordinate of herb. or null(help meth)
-        return getAvailableCoordinatesAround(coordinates)
+        return checkCoordinatesAround(coordinates)
                 .stream()
                 .filter(e -> simulationMap.getMap().get(e) != null && simulationMap.getMap().get(e) instanceof Herbivore)
                 .findFirst()
@@ -55,21 +75,59 @@ public class BreadthFirstSearch implements PathFinderService{
     }
 
     @Override
-    public Deque<Coordinates> findPathToHerbivore(Coordinates coordinates) {
-        Deque<Coordinates> toVisit = new ArrayDeque<>(getAvailableCoordinatesAround(coordinates));
-        Deque<Coordinates> path = new ArrayDeque<>();
+    public List<Coordinates> findPathToHerbivore(Coordinates start) {
+        Deque<Coordinates> queue = new ArrayDeque<>();
+        Set<Coordinates> visited = new HashSet<>();
+        Map<Coordinates, Coordinates> parentMap = new HashMap<>();
+        Coordinates end = null;
+        int count = 0;
+        queue.offer(start);
+        visited.add(start);
 
-        while (!toVisit.isEmpty()){
-            Coordinates current = toVisit.pollFirst();
-            if (isHerbivoreAround(current) != null) break;
-            path.offerLast(current);
+        while (!visited.isEmpty()){
+            ++count;
+            Coordinates current = queue.poll();
+            if (current == null){
+                return Stream.of(
+                        start,
+                        start
+                ).collect(Collectors.toList());
+            }
+            if (isHerbivoreAround(current) != null){
+                end = current;
+                break;
+            }
 
-            toVisit.addAll(getAvailableCoordinatesAround(current).stream().filter(e -> !path.contains(e)).toList());
+            List<Coordinates> neighbors = getAvailableCoordinatesAround(current);
+
+            for (Coordinates neighbor :
+                    neighbors) {
+                if (!visited.contains(neighbor)){
+                    queue.offer(neighbor);
+                    visited.add(neighbor);
+                    parentMap.put(neighbor, current);
+                }
+            }
         }
 
+        return reconstructPath(parentMap, start, end);
+    }
+    private static List<Coordinates> reconstructPath(Map<Coordinates, Coordinates> parentMap, Coordinates start, Coordinates end) {
+        List<Coordinates> path = new ArrayList<>();
+        Coordinates current = end;
+
+        while (current != null && !current.equals(start)) {
+            path.add(current);
+            current = parentMap.get(current);
+        }
+
+        if (current != null && current.equals(start)) {
+            path.add(current);
+        }
+
+        Collections.reverse(path);
         return path;
     }
-
     private List<Coordinates> getAvailableCoordinatesAround(Coordinates coordinates){
 //        Set<Coordinates> checkList = checkCoordinatesAround(coordinates);
 //        List<Coordinates> availableList = new ArrayList<>();
