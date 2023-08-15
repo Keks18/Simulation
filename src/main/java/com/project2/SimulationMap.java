@@ -53,12 +53,12 @@ public class SimulationMap {
                 i--;
             }
         }
-        for (int i = 0; i < 10; i++){
+        for (int i = 0; i < 7; i++){
             if (generateEntityDefaultPositions(new Rock(new Coordinates(coordinateBound))) != null){
                 i--;
             }
         }
-        for (int i = 0; i < 10; i++){
+        for (int i = 0; i < 7; i++){
             if (generateEntityDefaultPositions(new Tree(new Coordinates(coordinateBound))) != null){
                 i--;
             }

@@ -32,7 +32,6 @@ public class BreadthFirstSearch implements PathFinderService{
         Set<Coordinates> visited = new HashSet<>();
         Map<Coordinates, Coordinates> parentMap = new HashMap<>();
         Coordinates end = null;
-        int count = 0;
 
         queue.offer(start);
         visited.add(start);
@@ -81,12 +80,11 @@ public class BreadthFirstSearch implements PathFinderService{
         Set<Coordinates> visited = new HashSet<>();
         Map<Coordinates, Coordinates> parentMap = new HashMap<>();
         Coordinates end = null;
-        int count = 0;
+
         queue.offer(start);
         visited.add(start);
 
         while (!visited.isEmpty()){
-            ++count;
             Coordinates current = queue.poll();
             if (current == null){
                 return Stream.of(
@@ -140,14 +138,10 @@ public class BreadthFirstSearch implements PathFinderService{
         int y = coordinates.getY();
 
         return Stream.of(
-//                new Coordinates(x - 1, y - 1),
                 new Coordinates(x, y - 1),
-//                new Coordinates(x + 1, y - 1),
                 new Coordinates(x - 1, y),
                 new Coordinates(x + 1, y),
-//                new Coordinates(x - 1, y + 1),
                 new Coordinates(x, y + 1)
-//                new Coordinates(x + 1, y + 1)
         ).collect(Collectors.toCollection(HashSet::new));
     }
 
