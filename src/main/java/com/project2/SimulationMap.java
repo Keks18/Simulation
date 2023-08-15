@@ -7,10 +7,14 @@ import java.util.*;
 public class SimulationMap {
     private final int mapLineSize = 11;
     private final int coordinateBound = 10;
+    private final Map<Coordinates, Entity> map = new HashMap<>();
 
-    Map<Coordinates, Entity> map = new HashMap<>();
     public SimulationMap() {
         generateAllMapCoordinates();
+    }
+
+    public int getMapLineSize() {
+        return mapLineSize;
     }
     public int getSize(){
         return map.size();
@@ -60,6 +64,7 @@ public class SimulationMap {
             }
         }
     }
+
     private Entity setIfAbsentAndReturnEntity(Coordinates coordinate, Entity entity){
         if (map.putIfAbsent(coordinate, entity) == null){
             entity.coordinates = coordinate;
@@ -68,23 +73,16 @@ public class SimulationMap {
             return map.putIfAbsent(coordinate, entity);
         }
     }
-    public Entity generateEntityDefaultPositions(Entity entity){
+    private Entity generateEntityDefaultPositions(Entity entity){
             return setIfAbsentAndReturnEntity(entity.getCoordinates(), entity);
     }
-
-
     private void generateAllMapCoordinates(){
         for (int x = 1; x < mapLineSize; x++) {
             for (int y = 1; y < mapLineSize; y++) {
-                map.put(new Coordinates(x, y), null);
+                this.setEntity(new Coordinates(x, y), null);
             }
         }
     }
-
-    public int getMapLineSize() {
-        return mapLineSize;
-    }
-
     @Override
     public String toString() {
         return "Map{" +
