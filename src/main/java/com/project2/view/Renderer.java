@@ -2,11 +2,13 @@ package com.project2.view;
 
 import com.project2.SimulationMap;
 import com.project2.entity.Coordinates;
-import com.project2.entity.Entity;
 
-public class Renderer extends Entity {
-    public SimulationMap simulationMap;
+public class Renderer {
+    private final SimulationMap simulationMap;
 
+    public Renderer(SimulationMap simulationMap) {
+        this.simulationMap = simulationMap;
+    }
 
     public void render(int size){
         Coordinates keyCoordinates = new Coordinates();

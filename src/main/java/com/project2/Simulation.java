@@ -33,12 +33,11 @@ public class Simulation {
         private final Renderer renderer;
         public SimulationActions(SimulationMap simulationMap) {
             this.simulationMap = simulationMap;
-            this.renderer = new Renderer();
+            this.renderer = new Renderer(simulationMap);
         }
 
         public void initActions(){
             simulationMap.initializeEntities();
-            renderer.simulationMap = simulationMap;
             renderer.render(simulationMap.getMapLineSize());
         }
         public void turnActions(){
