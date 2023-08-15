@@ -1,21 +1,18 @@
 package com.project2;
 
 import com.project2.entity.*;
+import com.project2.view.Renderer;
 
 import java.util.*;
 
 public class Simulation {
     private int moveCounter = 1;
-    SimulationMap simulationMap ;
-    Actions actions;
+    private final SimulationMap simulationMap ;
+    private final SimulationActions actions;
 
     public Simulation() {
         this.simulationMap = new SimulationMap();
-        this.actions = new Actions(this.simulationMap, this);
-    }
-
-    private void nextTurn(){
-        actions.turnActions();
+        this.actions = new SimulationActions(this.simulationMap);
     }
     public void startSimulation(){
         System.out.println("Starting Simulation !!!");
@@ -27,18 +24,49 @@ public class Simulation {
             nextTurn();
         }
     }
+    public static void main(String[] args) {
+        Simulation simulation = new Simulation();
+        simulation.startSimulation();
+    }
+    private class SimulationActions {
+        private final SimulationMap simulationMap;
+        private final Renderer renderer;
+        public SimulationActions(SimulationMap simulationMap) {
+            this.simulationMap = simulationMap;
+            this.renderer = new Renderer();
+        }
 
+        public void initActions(){
+            simulationMap.initializeEntities();
+            renderer.simulationMap = simulationMap;
+            renderer.render(simulationMap.getMapLineSize());
+        }
+        public void turnActions(){
+            makeMoveCreatures(findCreaturesInMap());
+            renderer.render(simulationMap.getMapLineSize());
+            if (herbivoreWin()){
+                endOfSimulation(Herbivore.class);
+            }
+            if (predatorWin()){
+                endOfSimulation(Predator.class);
+            }
+        }
+
+    }
+
+    private void nextTurn(){
+        actions.turnActions();
+    }
     private void pauseSimulation(){
         System.out.println("stop simulation");
     }
-
-    public void makeMoveCreatures(Deque<Creature> creaturesToAdd) {
+    private void makeMoveCreatures(Deque<Creature> creaturesToAdd) {
         for (Creature creature :
                 creaturesToAdd) {
                 if (creature.getHP() > 0) creature.makeMove();
         }
     }
-    public Deque<Creature> findCreaturesInMap(){
+    private Deque<Creature> findCreaturesInMap(){
         Iterator<Entity> iterator = simulationMap.getAllEntities().iterator();
         Deque<Creature> creaturesToAdd = new ArrayDeque<>();
         while (iterator.hasNext()) {
@@ -54,7 +82,7 @@ public class Simulation {
         }
         return creaturesToAdd;
     }
-    public Boolean herbivoreWin(){
+    private Boolean herbivoreWin(){
         Iterator<Entity> iterator = simulationMap.getAllEntities().iterator();
         List<Grass> grassInMap = new ArrayList<>();
 
@@ -66,7 +94,7 @@ public class Simulation {
         }
         return grassInMap.isEmpty();
     }
-    public Boolean predatorWin(){
+    private Boolean predatorWin(){
         Iterator<Entity> iterator = simulationMap.getAllEntities().iterator();
         List<Herbivore> herbivoreInMap = new ArrayList<>();
 
@@ -78,7 +106,7 @@ public class Simulation {
         }
         return herbivoreInMap.isEmpty();
     }
-    public void endOfSimulation(Class winner){
+    private void endOfSimulation(Class winner){
         System.out.println("Simulation ended!!!");
         System.out.println("The winner is " + winner.getSimpleName());
         System.exit(0);
