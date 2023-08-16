@@ -25,7 +25,7 @@ public class ConsoleUserInterface implements UserInterfaceService{
                     throw new RuntimeException(e);
                 }
             }
-            default -> simulation.isRun = false;
+            default -> simulation.setRun(false);
         }
     }
 }

@@ -8,8 +8,8 @@ import com.project2.view.Renderer;
 import java.util.*;
 
 public class Simulation {
-    public boolean isRun = false;
-    int state;
+    private boolean isRun = false;
+    private int state;
     private int moveCounter = 1;
     private final SimulationMap simulationMap ;
     private final SimulationActions actions;
@@ -26,15 +26,32 @@ public class Simulation {
         System.out.println("Starting Simulation !!!");
         System.out.println();
         actions.initActions();
-        isRun = true;
-        while (isRun){
+        setRun(true);
+        while (this.isRun()){
             System.out.println("| Round " + moveCounter + " |");
             Thread.sleep(1500);
             moveCounter++;
             nextTurn();
         }
     }
-    public static void main(String[] args) throws InterruptedException {
+    public void startSimulationWithControl() throws InterruptedException {
+        System.out.println("Starting Simulation With Control!!!");
+        System.out.println();
+        actions.initActions();
+        Thread.sleep(1300);
+        int current;
+        setRun(true);
+        while (this.isRun()){
+            System.out.println("| Round " + moveCounter + " |");
+            moveCounter++;
+            nextTurn();
+            System.out.println("If you typing 1 -> end simulation");
+            System.out.println("If you typing 2 or any num -> next round generation");
+            current = scanner.nextInt();
+            if (current == 1) setRun(false);
+        }
+    }
+    public static void main(String[] args) {
         Simulation simulation = new Simulation();
         System.out.println("If you type num 1 you will get standard simulation without user control");
         System.out.println("OR");
@@ -42,25 +59,13 @@ public class Simulation {
         simulation.state = simulation.scanner.nextInt();
         simulation.interfaceService.processUserInput(simulation.state);
     }
-
-    public void startSimulationWithControl() throws InterruptedException {
-        System.out.println("Starting Simulation With Control!!!");
-        System.out.println();
-        actions.initActions();
-        Thread.sleep(1300);
-        int current;
-        isRun = true;
-        while (isRun){
-            System.out.println("| Round " + moveCounter + " |");
-            moveCounter++;
-            nextTurn();
-            System.out.println("If you typing 1 -> end simulation");
-            System.out.println("If you typing 2 or any num -> next round generation");
-            current = scanner.nextInt();
-            if (current == 1) isRun = false;
-        }
+    public void setRun(boolean run) {
+        isRun = run;
     }
 
+    public boolean isRun() {
+        return isRun;
+    }
     private class SimulationActions {
         private final SimulationMap simulationMap;
         private final Renderer renderer;
@@ -83,7 +88,6 @@ public class Simulation {
                 endOfSimulation(Predator.class);
             }
         }
-
     }
 
     private void nextTurn(){

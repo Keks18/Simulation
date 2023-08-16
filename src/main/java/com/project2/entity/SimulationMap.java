@@ -1,4 +1,4 @@
-package com.project2;
+package com.project2.entity;
 
 import com.project2.entity.*;
 
@@ -16,9 +16,6 @@ public class SimulationMap {
     public int getMapLineSize() {
         return mapLineSize;
     }
-    public int getSize(){
-        return map.size();
-    }
     public void setEntity(Coordinates coordinate, Entity entity){
         map.put(coordinate, entity);
     }
@@ -31,14 +28,11 @@ public class SimulationMap {
     public Entity getEntity(Coordinates coordinates){
         return map.get(coordinates);
     }
-    public void removeEntity(Coordinates coordinates){
-        map.remove(coordinates);
-    }
     public boolean containsCoordinate(Coordinates coordinates){
         return map.containsKey(coordinates);
     }
     public void initializeEntities(){
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 4; i++){
             if (generateEntityDefaultPositions(new Herbivore(10,2, new Coordinates(coordinateBound), this)) != null){
                 i--;
             }
@@ -48,17 +42,17 @@ public class SimulationMap {
                 i--;
             }
         }
-        for (int i = 0; i < 7; i++){
+        for (int i = 0; i < 10; i++){
             if (generateEntityDefaultPositions(new Grass(new Coordinates(coordinateBound))) != null){
                 i--;
             }
         }
-        for (int i = 0; i < 7; i++){
+        for (int i = 0; i < 6; i++){
             if (generateEntityDefaultPositions(new Rock(new Coordinates(coordinateBound))) != null){
                 i--;
             }
         }
-        for (int i = 0; i < 7; i++){
+        for (int i = 0; i < 6; i++){
             if (generateEntityDefaultPositions(new Tree(new Coordinates(coordinateBound))) != null){
                 i--;
             }

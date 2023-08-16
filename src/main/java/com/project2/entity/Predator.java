@@ -1,6 +1,5 @@
 package com.project2.entity;
 
-import com.project2.SimulationMap;
 import com.project2.service.BreadthFirstSearch;
 import com.project2.view.View;
 

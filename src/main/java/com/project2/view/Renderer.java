@@ -1,6 +1,6 @@
 package com.project2.view;
 
-import com.project2.SimulationMap;
+import com.project2.entity.SimulationMap;
 import com.project2.entity.Coordinates;
 
 public class Renderer {

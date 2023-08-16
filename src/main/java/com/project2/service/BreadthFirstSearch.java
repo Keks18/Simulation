@@ -1,7 +1,7 @@
 package com.project2.service;
 
 import com.project2.entity.Coordinates;
-import com.project2.SimulationMap;
+import com.project2.entity.SimulationMap;
 import com.project2.entity.Grass;
 import com.project2.entity.Herbivore;
 
